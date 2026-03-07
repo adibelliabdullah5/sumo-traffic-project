@@ -1,0 +1,18 @@
+<configuration>
+    <input>
+        <net-file value="network_multi.net.xml"/>
+        <route-files value="routes_multi.rou.xml"/>
+    </input>
+
+    <time>
+        <begin value="0"/>
+        <end value="2000"/>
+        <step-length value="1"/>
+    </time>
+
+    <processing>
+        <ignore-route-errors value="false"/>
+        <time-to-teleport value="-1"/>
+    </processing>
+
+</configuration>

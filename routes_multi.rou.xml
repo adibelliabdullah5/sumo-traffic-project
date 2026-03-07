@@ -1,0 +1,133 @@
+<routes>
+
+    <!-- =========================
+         VEHICLE TYPES (GÖRÜNÜM + RENK)  -> ÜÇGEN OLMASIN
+         ========================= -->
+    <vType id="car" vClass="passenger"
+           accel="2.6" decel="4.5" sigma="0.5"
+           length="4.7" width="1.8" maxSpeed="16.7"
+           guiShape="passenger" color="0.15,0.45,1.0"/>
+
+    <vType id="sport" vClass="passenger"
+           accel="3.2" decel="4.5" sigma="0.4"
+           length="4.5" width="1.8" maxSpeed="22.0"
+           guiShape="passenger" color="0.2,0.85,0.2"/>
+
+    <vType id="truck" vClass="truck"
+           accel="1.2" decel="4.0" sigma="0.6"
+           length="8.0" width="2.5" maxSpeed="13.0"
+           guiShape="truck" color="1.0,0.6,0.1"/>
+
+    <vType id="bus" vClass="bus"
+           accel="1.3" decel="4.0" sigma="0.6"
+           length="12.0" width="2.5" maxSpeed="13.0"
+           guiShape="bus" color="1.0,0.85,0.0"/>
+
+    <!-- EMERGENCY: çok belirgin -->
+    <vType id="ambulance" vClass="emergency"
+           accel="3.8" decel="7.0" sigma="0.2"
+           length="6.2" width="2.2" maxSpeed="25.0"
+           guiShape="emergency" color="1,1,1"/>
+
+    <vType id="police" vClass="emergency"
+           accel="3.8" decel="7.0" sigma="0.2"
+           length="5.0" width="2.0" maxSpeed="25.0"
+           guiShape="emergency" color="0.0,0.0,1.0"/>
+
+    <vType id="firetruck" vClass="emergency"
+           accel="2.8" decel="6.5" sigma="0.25"
+           length="8.5" width="2.5" maxSpeed="22.0"
+           guiShape="truck" color="1.0,0.0,0.0"/>
+
+
+    <!-- =========================
+         ROUTES
+         Edge setin: A_W2A A_E2A A_N2A A_S2A  | A2A_* | A2B
+                   B_W2B B_E2B B_N2B B_S2B  | B2B_* | B2A
+         ========================= -->
+
+    <!-- ========== A JUNCTION (dönüş çeşitliliği) ========== -->
+    <route id="A_N_to_A_S" edges="A_N2A A2A_S"/>
+    <route id="A_N_to_A_E" edges="A_N2A A2A_E"/>
+    <route id="A_N_to_A_W" edges="A_N2A A2A_W"/>
+
+    <route id="A_S_to_A_N" edges="A_S2A A2A_N"/>
+    <route id="A_S_to_A_E" edges="A_S2A A2A_E"/>
+    <route id="A_S_to_A_W" edges="A_S2A A2A_W"/>
+
+    <route id="A_W_to_A_E" edges="A_W2A A2A_E"/>
+    <route id="A_W_to_A_N" edges="A_W2A A2A_N"/>
+    <route id="A_W_to_A_S" edges="A_W2A A2A_S"/>
+
+    <route id="A_E_to_A_W" edges="A_E2A A2A_W"/>
+    <route id="A_E_to_A_N" edges="A_E2A A2A_N"/>
+    <route id="A_E_to_A_S" edges="A_E2A A2A_S"/>
+
+    <!-- ========== B JUNCTION (dönüş çeşitliliği) ========== -->
+    <route id="B_N_to_B_S" edges="B_N2B B2B_S"/>
+    <route id="B_N_to_B_E" edges="B_N2B B2B_E"/>
+    <route id="B_N_to_B_W" edges="B_N2B B2B_W"/>
+
+    <route id="B_S_to_B_N" edges="B_S2B B2B_N"/>
+    <route id="B_S_to_B_E" edges="B_S2B B2B_E"/>
+    <route id="B_S_to_B_W" edges="B_S2B B2B_W"/>
+
+    <route id="B_W_to_B_E" edges="B_W2B B2B_E"/>
+    <route id="B_W_to_B_N" edges="B_W2B B2B_N"/>
+    <route id="B_W_to_B_S" edges="B_W2B B2B_S"/>
+
+    <route id="B_E_to_B_W" edges="B_E2B B2B_W"/>
+    <route id="B_E_to_B_N" edges="B_E2B B2B_N"/>
+    <route id="B_E_to_B_S" edges="B_E2B B2B_S"/>
+
+    <!-- ========== TWO JUNCTIONS (A<->B) ========== -->
+    <!-- A -> B (SADECE A'da W/E girişlerinden A2B'ye gidiyoruz: network'te en stabil bu) -->
+    <route id="A_W_to_B_E" edges="A_W2A A2B B2B_E"/>
+    <route id="A_W_to_B_W" edges="A_W2A A2B B2B_W"/>
+    <route id="A_E_to_B_W" edges="A_E2A A2B B2B_W"/>
+    <route id="A_E_to_B_E" edges="A_E2A A2B B2B_E"/>
+
+    <!-- B -> A (B'den A'ya B2A ile geliyor, A'da E/W çıkışına veriyoruz) -->
+    <route id="B_W_to_A_E" edges="B_W2B B2A A2A_E"/>
+    <route id="B_W_to_A_W" edges="B_W2B B2A A2A_W"/>
+    <route id="B_E_to_A_W" edges="B_E2B B2A A2A_W"/>
+    <route id="B_E_to_A_E" edges="B_E2B B2A A2A_E"/>
+
+
+    <!-- =========================
+         FLOWS (TRAFİK DENGELİ)
+         end=700 yaptım: senin 699 bitti dediğin sim süresine uyumlu
+         ========================= -->
+
+    <!-- ANA YATAY (A<->B) - yoğunluğu düşürdük, kuyruk azalsın -->
+    <flow id="f_AB_1" type="car"   route="A_W_to_B_E" begin="0" end="700" vehsPerHour="360" departLane="best"/>
+    <flow id="f_AB_2" type="car"   route="A_E_to_B_W" begin="0" end="700" vehsPerHour="360" departLane="best"/>
+    <flow id="f_BA_1" type="car"   route="B_E_to_A_W" begin="0" end="700" vehsPerHour="360" departLane="best"/>
+    <flow id="f_BA_2" type="car"   route="B_W_to_A_E" begin="0" end="700" vehsPerHour="360" departLane="best"/>
+
+    <!-- ÇEŞİTLİ DÖNÜŞLER (A içinde / B içinde) -->
+    <flow id="f_A_turns_1" type="sport" route="A_N_to_A_E" begin="0" end="700" vehsPerHour="140" departLane="best"/>
+    <flow id="f_A_turns_2" type="sport" route="A_S_to_A_W" begin="0" end="700" vehsPerHour="140" departLane="best"/>
+    <flow id="f_A_turns_3" type="car"   route="A_W_to_A_N" begin="0" end="700" vehsPerHour="140" departLane="best"/>
+    <flow id="f_A_turns_4" type="car"   route="A_E_to_A_S" begin="0" end="700" vehsPerHour="140" departLane="best"/>
+
+    <flow id="f_B_turns_1" type="sport" route="B_N_to_B_W" begin="0" end="700" vehsPerHour="140" departLane="best"/>
+    <flow id="f_B_turns_2" type="sport" route="B_S_to_B_E" begin="0" end="700" vehsPerHour="140" departLane="best"/>
+    <flow id="f_B_turns_3" type="car"   route="B_W_to_B_S" begin="0" end="700" vehsPerHour="140" departLane="best"/>
+    <flow id="f_B_turns_4" type="car"   route="B_E_to_B_N" begin="0" end="700" vehsPerHour="140" departLane="best"/>
+
+    <!-- AĞIR ARAÇLAR AZ -->
+    <flow id="f_truck" type="truck" route="A_W_to_B_E" begin="0" end="700" vehsPerHour="30" departLane="best"/>
+    <flow id="f_bus"   type="bus"   route="B_E_to_A_W" begin="0" end="700" vehsPerHour="18" departLane="best"/>
+
+
+    <!-- =========================
+         EMERGENCY (ROTASI GARANTİ + BELİRGİN)
+         Not: A_N2A'dan A2B'ye zorlamıyoruz (bağlantı yoksa patlıyor)
+         ========================= -->
+
+    <vehicle id="ambulance_1" type="ambulance" route="A_W_to_B_E" depart="60"  departLane="best" departSpeed="max"/>
+    <vehicle id="police_1"    type="police"    route="B_E_to_A_W" depart="160" departLane="best" departSpeed="max"/>
+    <vehicle id="fire_1"      type="firetruck" route="A_E_to_B_W" depart="260" departLane="best" departSpeed="max"/>
+
+</routes>

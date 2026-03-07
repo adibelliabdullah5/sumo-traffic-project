@@ -1,0 +1,4 @@
+Scenario,Avg_Wait_s,Total_Wait_s,Avg_Speed_mps,Stops
+Fixed,7.37,75709,4.27,2921
+Smart,4.13,35960,5.22,1601
+Emergency,3.2,21000,6.1,900

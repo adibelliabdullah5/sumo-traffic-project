@@ -1,0 +1,68 @@
+<connections>
+
+    <!-- ===== JUNCTION A ===== -->
+
+    <!-- West giriş -->
+    <connection from="A_W2A" to="A2A_E"/>
+    <connection from="A_W2A" to="A2A_N"/>
+    <connection from="A_W2A" to="A2A_S"/>
+    <connection from="A_W2A" to="A2B"/>   <!-- EKLENDİ -->
+
+    <!-- East giriş -->
+    <connection from="A_E2A" to="A2A_W"/>
+    <connection from="A_E2A" to="A2A_N"/>
+    <connection from="A_E2A" to="A2A_S"/>
+    <connection from="A_E2A" to="A2B"/>   <!-- EKLENDİ -->
+
+    <!-- North giriş -->
+    <connection from="A_N2A" to="A2A_S"/>
+    <connection from="A_N2A" to="A2A_E"/>
+    <connection from="A_N2A" to="A2A_W"/>
+    <connection from="A_N2A" to="A2B"/>   <!-- EKLENDİ -->
+
+    <!-- South giriş -->
+    <connection from="A_S2A" to="A2A_N"/>
+    <connection from="A_S2A" to="A2A_E"/>
+    <connection from="A_S2A" to="A2A_W"/>
+    <connection from="A_S2A" to="A2B"/>   <!-- EKLENDİ -->
+
+    <!-- B'den A'ya gelen -->
+    <connection from="B2A" to="A2A_N"/>
+    <connection from="B2A" to="A2A_S"/>
+    <connection from="B2A" to="A2A_E"/>
+    <connection from="B2A" to="A2A_W"/>
+
+
+    <!-- ===== JUNCTION B ===== -->
+
+    <!-- A'dan B'ye gelen yol (A2B) B kavşağına giriyor, B'den dağıt -->
+    <connection from="A2B" to="B2B_N"/>
+    <connection from="A2B" to="B2B_S"/>
+    <connection from="A2B" to="B2B_E"/>
+    <connection from="A2B" to="B2B_W"/>
+
+    <!-- West giriş -->
+    <connection from="B_W2B" to="B2B_E"/>
+    <connection from="B_W2B" to="B2B_N"/>
+    <connection from="B_W2B" to="B2B_S"/>
+    <connection from="B_W2B" to="B2A"/>   <!-- EKLENDİ -->
+
+    <!-- East giriş -->
+    <connection from="B_E2B" to="B2B_W"/>
+    <connection from="B_E2B" to="B2B_N"/>
+    <connection from="B_E2B" to="B2B_S"/>
+    <connection from="B_E2B" to="B2A"/>   <!-- EKLENDİ -->
+
+    <!-- North giriş -->
+    <connection from="B_N2B" to="B2B_S"/>
+    <connection from="B_N2B" to="B2B_E"/>
+    <connection from="B_N2B" to="B2B_W"/>
+    <connection from="B_N2B" to="B2A"/>   <!-- EKLENDİ -->
+
+    <!-- South giriş -->
+    <connection from="B_S2B" to="B2B_N"/>
+    <connection from="B_S2B" to="B2B_E"/>
+    <connection from="B_S2B" to="B2B_W"/>
+    <connection from="B_S2B" to="B2A"/>   <!-- EKLENDİ -->
+
+</connections>

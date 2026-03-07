@@ -1,0 +1,32 @@
+<routes>
+
+    <!-- NORMAL ARAÇ TİPİ -->
+    <vType id="car"
+           accel="1.0" decel="4.5" sigma="0.5"
+           length="5" maxSpeed="25" color="0,0,255"/>
+
+    <!-- KAVŞAK ROTALARI -->
+    <route id="north_south" edges="N2C C2S"/>
+    <route id="south_north" edges="S2C C2N"/>
+    <route id="east_west"   edges="E2C C2W"/>
+    <route id="west_east"   edges="W2C C2E"/>
+
+    <!-- SÜREKLİ TRAFİK -->
+    <flow id="flow1" type="car" route="north_south" begin="0" end="2000" vehsPerHour="600"/>
+    <flow id="flow2" type="car" route="south_north" begin="0" end="2000" vehsPerHour="600"/>
+    <flow id="flow3" type="car" route="east_west"   begin="0" end="2000" vehsPerHour="300"/>
+    <flow id="flow4" type="car" route="west_east"   begin="0" end="2000" vehsPerHour="300"/>
+
+    <!-- 🚑 AMBULANS -->
+    <vType id="ambulance"
+           accel="2.0" decel="6.0" sigma="0"
+           length="6" width="2"
+           maxSpeed="35"
+           color="255,0,0"
+           guiShape="emergency"/>
+
+    <!-- Ambulans erken gelsin ki görelim -->
+    <vehicle id="ambulance_1" type="ambulance"
+             route="north_south" depart="5"/>
+
+</routes>

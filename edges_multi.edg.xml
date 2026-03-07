@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<edges>
+
+    <!-- ===== INTERSECTION A ===== -->
+
+    <!-- incoming to A -->
+    <edge id="A_N2A" from="A_N" to="A" numLanes="1" speed="13.9"/>
+    <edge id="A_S2A" from="A_S" to="A" numLanes="1" speed="13.9"/>
+    <edge id="A_E2A" from="A_E" to="A" numLanes="1" speed="13.9"/>
+    <edge id="A_W2A" from="A_W" to="A" numLanes="1" speed="13.9"/>
+
+    <!-- outgoing from A -->
+    <edge id="A2A_N" from="A" to="A_N" numLanes="1" speed="13.9"/>
+    <edge id="A2A_S" from="A" to="A_S" numLanes="1" speed="13.9"/>
+    <edge id="A2A_E" from="A" to="A_E" numLanes="1" speed="13.9"/>
+    <edge id="A2A_W" from="A" to="A_W" numLanes="1" speed="13.9"/>
+
+    <!-- ===== INTERSECTION B ===== -->
+
+    <!-- incoming to B -->
+    <edge id="B_N2B" from="B_N" to="B" numLanes="1" speed="13.9"/>
+    <edge id="B_S2B" from="B_S" to="B" numLanes="1" speed="13.9"/>
+    <edge id="B_E2B" from="B_E" to="B" numLanes="1" speed="13.9"/>
+    <edge id="B_W2B" from="B_W" to="B" numLanes="1" speed="13.9"/>
+
+    <!-- outgoing from B -->
+    <edge id="B2B_N" from="B" to="B_N" numLanes="1" speed="13.9"/>
+    <edge id="B2B_S" from="B" to="B_S" numLanes="1" speed="13.9"/>
+    <edge id="B2B_E" from="B" to="B_E" numLanes="1" speed="13.9"/>
+    <edge id="B2B_W" from="B" to="B_W" numLanes="1" speed="13.9"/>
+
+    <!-- ===== MAIN ROAD BETWEEN A AND B ===== -->
+    <edge id="A2B" from="A" to="B" numLanes="1" speed="13.9"/>
+    <edge id="B2A" from="B" to="A" numLanes="1" speed="13.9"/>
+
+</edges>
