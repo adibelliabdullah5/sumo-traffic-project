@@ -1,0 +1,131 @@
+import traci
+import time
+
+CONFIG = "traffic.sumocfg"
+
+NS_EDGES = ["N2C", "S2C"]
+EW_EDGES = ["E2C", "W2C"]
+
+# Ambulans bilgisi: {"id": öncelik seviyesi}
+AMBULANCES = {
+    "ambulance_1": 1,  # en yüksek öncelik
+    "ambulance_2": 2,
+    "ambulance_3": 3,
+}
+
+AMBULANCE_DISTANCE = 150  # metre
+SIM_STEP_TIME = 0.2       # simülasyon adım süresi
+YELLOW_STEPS = 3          # sarı ışık için simülasyon adımı
+
+
+def edge_vehicle_count(edges):
+    return sum(traci.edge.getLastStepVehicleNumber(e) for e in edges)
+
+
+def get_ambulance_direction(ambulance_id):
+    edge = traci.vehicle.getRoadID(ambulance_id)
+    if edge in NS_EDGES:
+        return "NS"
+    if edge in EW_EDGES:
+        return "EW"
+    return None
+
+
+def safe_switch_to_green(tls_id, direction):
+    current_phase = traci.trafficlight.getPhase(tls_id)
+
+    # Kuzey-Güney yönü
+    if direction == "NS" and current_phase != 0:
+        traci.trafficlight.setPhase(tls_id, 1)  # NS YELLOW
+        print("🟡 NS YELLOW")
+        for _ in range(YELLOW_STEPS):
+            traci.simulationStep()
+            time.sleep(SIM_STEP_TIME)  # görsel sarı ışık için
+        traci.trafficlight.setPhase(tls_id, 0)  # NS GREEN
+        print("🟢 NS GREEN")
+
+    # Doğu-Batı yönü
+    elif direction == "EW" and current_phase != 2:
+        traci.trafficlight.setPhase(tls_id, 3)  # EW YELLOW
+        print("🟡 EW YELLOW")
+        for _ in range(YELLOW_STEPS):
+            traci.simulationStep()
+            time.sleep(SIM_STEP_TIME)  # görsel sarı ışık için
+        traci.trafficlight.setPhase(tls_id, 2)  # EW GREEN
+        print("🟢 EW GREEN")
+
+
+def select_highest_priority_ambulance(ambulances):
+    """En yakın ve en yüksek öncelikli ambulansı seç (düzgün matematik + harita kontrol)"""
+    closest_score = float("inf")
+    selected_ambulance = None
+
+    for amb_id, priority in ambulances.items():
+        if amb_id in traci.vehicle.getIDList():
+            edge = traci.vehicle.getRoadID(amb_id)
+            # Sadece bizim ilgilendiğimiz yolları dikkate al
+            if edge in NS_EDGES + EW_EDGES:
+                lane_id = traci.vehicle.getLaneID(amb_id)
+                lane_pos = traci.vehicle.getLanePosition(amb_id)
+                lane_length = traci.lane.getLength(lane_id)
+                distance_to_junction = lane_length - lane_pos
+                # Skor = mesafe * öncelik (küçük skor = yüksek öncelik + yakın)
+                score = distance_to_junction * priority
+                if score < closest_score:
+                    closest_score = score
+                    selected_ambulance = amb_id
+
+    return selected_ambulance
+
+
+def main():
+    traci.start(["sumo-gui", "-c", CONFIG, "--start"])
+    tls_id = traci.trafficlight.getIDList()[0]
+
+    sim_end = 200
+    decision_every = 10
+    threshold = 2
+    emergency_mode = False
+
+    for t in range(sim_end):
+        traci.simulationStep()
+        time.sleep(SIM_STEP_TIME)
+
+        # En yüksek öncelikli ambulans
+        active_ambulance = select_highest_priority_ambulance(AMBULANCES)
+
+        if active_ambulance:
+            traci.vehicle.setColor(active_ambulance, (255, 0, 0, 255))
+            lane_id = traci.vehicle.getLaneID(active_ambulance)
+            lane_pos = traci.vehicle.getLanePosition(active_ambulance)
+            lane_length = traci.lane.getLength(lane_id)
+            distance_to_junction = lane_length - lane_pos
+
+            if distance_to_junction <= AMBULANCE_DISTANCE:
+                direction = get_ambulance_direction(active_ambulance)
+                if direction:
+                    safe_switch_to_green(tls_id, direction)
+                    if not emergency_mode:
+                        print(f"🚑 {active_ambulance} 150m içinde → Öncelik verildi")
+                        emergency_mode = True
+                continue
+
+        if emergency_mode and not active_ambulance:
+            print("✅ Ambulans geçti → NORMAL MOD")
+            emergency_mode = False
+
+        # Trafik yoğunluğu kontrolü
+        if t % decision_every == 0 and not emergency_mode:
+            ns_count = edge_vehicle_count(NS_EDGES)
+            ew_count = edge_vehicle_count(EW_EDGES)
+            print("NS:", ns_count, "EW:", ew_count)
+            if ns_count > ew_count + threshold:
+                safe_switch_to_green(tls_id, "NS")
+            elif ew_count > ns_count + threshold:
+                safe_switch_to_green(tls_id, "EW")
+
+    traci.close()
+
+
+if __name__ == "__main__":
+    main() 
