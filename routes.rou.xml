@@ -1,9 +1,26 @@
 <routes>
 
-    <!-- NORMAL ARAÇ TİPİ -->
-    <vType id="car"
+    <!-- NORMAL ARAÇ TİPLERİ -->
+    <vType id="car_gray"
            accel="1.0" decel="4.5" sigma="0.5"
-           length="5" maxSpeed="25" color="0,0,255"/>
+           length="5" maxSpeed="25" color="220,220,220"
+           guiShape="passenger"/>
+    <vType id="car_blue"
+           accel="1.0" decel="4.5" sigma="0.5"
+           length="5" maxSpeed="25" color="0,112,192"
+           guiShape="passenger"/>
+    <vType id="car_red"
+           accel="1.0" decel="4.5" sigma="0.5"
+           length="5" maxSpeed="25" color="128,20,20"
+           guiShape="passenger"/>
+    <vType id="car_green"
+           accel="1.0" decel="4.5" sigma="0.5"
+           length="5" maxSpeed="25" color="0,130,90"
+           guiShape="passenger"/>
+    <vType id="car_yellow"
+           accel="1.0" decel="4.5" sigma="0.5"
+           length="5" maxSpeed="25" color="200,180,0"
+           guiShape="passenger"/>
 
     <!-- KAVŞAK ROTALARI -->
     <route id="north_south" edges="N2C C2S"/>
@@ -12,10 +29,11 @@
     <route id="west_east"   edges="W2C C2E"/>
 
     <!-- SÜREKLİ TRAFİK -->
-    <flow id="flow1" type="car" route="north_south" begin="0" end="2000" vehsPerHour="600"/>
-    <flow id="flow2" type="car" route="south_north" begin="0" end="2000" vehsPerHour="600"/>
-    <flow id="flow3" type="car" route="east_west"   begin="0" end="2000" vehsPerHour="300"/>
-    <flow id="flow4" type="car" route="west_east"   begin="0" end="2000" vehsPerHour="300"/>
+    <flow id="flow1" type="car_gray" route="north_south" begin="0" end="2000" vehsPerHour="200"/>
+    <flow id="flow2" type="car_blue" route="north_south" begin="0" end="2000" vehsPerHour="200"/>
+    <flow id="flow3" type="car_red" route="south_north" begin="0" end="2000" vehsPerHour="200"/>
+    <flow id="flow4" type="car_green" route="east_west"   begin="0" end="2000" vehsPerHour="150"/>
+    <flow id="flow5" type="car_yellow" route="west_east"   begin="0" end="2000" vehsPerHour="150"/>
 
     <!-- 🚑 AMBULANS -->
     <vType id="ambulance"
@@ -23,10 +41,63 @@
            length="6" width="2"
            maxSpeed="35"
            color="255,0,0"
-           guiShape="emergency"/>
+           guiShape="emergency"
+           priority="2"
+           ignoreRedLight="true"/>
 
-    <!-- Ambulans erken gelsin ki görelim -->
-    <vehicle id="ambulance_1" type="ambulance"
-             route="north_south" depart="5"/>
+    <!-- 🚔 POLİS -->
+    <vType id="police"
+           accel="2.5" decel="7.0" sigma="0"
+           length="5" width="2"
+           maxSpeed="40"
+           color="0,0,220"
+           guiShape="police"
+           priority="3"
+           ignoreRedLight="true"/>
+
+    <!-- 🚒 İTFAİYE -->
+    <vType id="fire"
+           accel="1.5" decel="5.0" sigma="0"
+           length="8" width="2.5"
+           maxSpeed="30"
+           color="255,100,0"
+           guiShape="firebrigade"
+           priority="1"
+           ignoreRedLight="true"/>
+
+    <!-- Ambulans düzenli aralıkla gelme -->
+    <flow id="flow_ambulance_ns" type="ambulance" route="north_south"
+          begin="5" end="200" period="30" departLane="best" departSpeed="max"/>
+    <flow id="flow_ambulance_sn" type="ambulance" route="south_north"
+          begin="5" end="200" period="30" departLane="best" departSpeed="max"/>
+    <flow id="flow_ambulance_ew" type="ambulance" route="east_west"
+          begin="5" end="200" period="30" departLane="best" departSpeed="max"/>
+    <flow id="flow_ambulance_we" type="ambulance" route="west_east"
+          begin="5" end="200" period="30" departLane="best" departSpeed="max"/>
+
+    <!-- Polis düzenli aralıkla gelme -->
+    <flow id="flow_police_ns" type="police" route="north_south"
+          begin="10" end="200" period="20" departLane="best" departSpeed="max"/>
+    <flow id="flow_police_sn" type="police" route="south_north"
+          begin="10" end="200" period="20" departLane="best" departSpeed="max"/>
+    <flow id="flow_police_ew" type="police" route="east_west"
+          begin="10" end="200" period="20" departLane="best" departSpeed="max"/>
+    <flow id="flow_police_we" type="police" route="west_east"
+          begin="10" end="200" period="20" departLane="best" departSpeed="max"/>
+
+    <!-- İtfaiye düzenli aralıkla gelme -->
+    <flow id="flow_fire_ns" type="fire" route="north_south"
+          begin="15" end="200" period="25" departLane="best" departSpeed="max"/>
+    <flow id="flow_fire_sn" type="fire" route="south_north"
+          begin="15" end="200" period="25" departLane="best" departSpeed="max"/>
+    <flow id="flow_fire_ew" type="fire" route="east_west"
+          begin="15" end="200" period="25" departLane="best" departSpeed="max"/>
+    <flow id="flow_fire_we" type="fire" route="west_east"
+          begin="15" end="200" period="25" departLane="best" departSpeed="max"/>
+
+    <!-- İlk örnek acil araçlar -->
+    <vehicle id="ambulance_1" type="ambulance" route="north_south" depart="5" departLane="best" departSpeed="max"/>
+    <vehicle id="police_1" type="police" route="east_west" depart="10" departLane="best" departSpeed="max"/>
+    <vehicle id="fire_1" type="fire" route="west_east" depart="15" departLane="best" departSpeed="max"/>
 
 </routes>

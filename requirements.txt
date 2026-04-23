@@ -1,0 +1,5 @@
+traci
+sumolib
+opencv-python
+pandas
+matplotlib
